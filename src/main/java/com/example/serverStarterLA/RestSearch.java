@@ -344,9 +344,9 @@ public class RestSearch {
 				//printLint
 				printLint(lint,7);
 				//se non trova corrispondenze do un risultato approssimato
-				if (lint.size() == 0) lint.addAll(templint);
+				/*if (lint.size() == 0) lint.addAll(templint);
 				//printLint
-				printLint(lint,8);
+				printLint(lint,8);*/
 			}
 			
 			if (imp != null) {//...see sono presenti dati di un impianto, cerco corrispondenze tra impianti nei risultati trovati
@@ -368,9 +368,9 @@ public class RestSearch {
 				//printLint
 				printLint(lint,9);
 				//se non trova corrispondenze do un risultato approssimato
-				if (lint.size() == 0) lint.addAll(templint);
+				/*if (lint.size() == 0) lint.addAll(templint);
 				//printLint
-				printLint(lint,10);
+				printLint(lint,10);*/
 			}
 
 			
