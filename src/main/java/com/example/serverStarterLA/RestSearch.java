@@ -147,18 +147,19 @@ public class RestSearch {
 		}
 		
 		
-		
+		//se ho il numero impianto effettuo la ricerca usando quello...
 		if (!imp.getNumero_impianto().equals("")) limp = ir.findByNumeroImpianto(imp.getNumero_impianto());
 		
+		//...altrimenti se h il numero di matricola uso quello...
 		else if (!imp.getNumero_matricola().equals("")) limp = ir.findByNumeroMatricola(imp.getNumero_matricola());
 
 
-		else {
+		else {//...altrimenti uso l'indirizzo
 			
 			if (!imp.getProvincia().equals("")) limp = ir.findByProvincia(imp.getProvincia());
 			
 			if (!imp.getCAP().equals("")) {
-				
+				//se non ho ancora trovato risultati, cerco usando il cap
 				if (limp == null || limp.size() == 0) limp = ir.findByCap(imp.getCAP());
 				
 				List<Impianto> templimp = new ArrayList();
@@ -183,7 +184,7 @@ public class RestSearch {
 			}
 			
 			if (!imp.getVia().equals("")) {
-				
+				//se non ho ancora trovato risultati, cerco usando la via
 				if (limp == null  || limp.size() == 0) limp = ir.findByVia(imp.getVia());
 				
 				List<Impianto> templimp = new ArrayList();
@@ -208,7 +209,7 @@ public class RestSearch {
 			}
 			
 			if (!imp.getPortone().equals("")) {
-				
+				//se non ho ancora trovato risultati, cerco usando il portone
 				if (limp == null  || limp.size() == 0) limp = ir.findByPortone(imp.getPortone());
 				
 				List<Impianto> templimp = new ArrayList();
@@ -273,13 +274,25 @@ public class RestSearch {
 			e.printStackTrace();
 		}
 		
+		//se è presente una data, ricerco usando quella
 		if (interv.getData() != null && !interv.getData().toString().equals("")) {
 			
 			lint = intr.findByData(interv.getData());
 			
-			if (lint.size() == 0) lint = intr.findByTipo(interv.getTipo());
+			//printLint
+			printLint(lint,0);
 			
-			else {
+			//se non ho ancora trovato risultati, cerco per tipo...
+			if (lint.size() == 0) {
+				lint = intr.findByTipo(interv.getTipo());
+				//printLint
+				printLint(lint,1);
+			}
+			
+			
+			else {//...altrimenti cerco corrispondenza tra data e tipo nei risultati trovati
+				//printLint
+				printLint(lint,2);
 				List<Intervento> templint = new ArrayList();
 				templint.addAll(lint);
 				lint.clear();
@@ -294,18 +307,26 @@ public class RestSearch {
 					}
 
 				}
-				
+				//printLint
+				printLint(lint,3);
 				//se non trova corrispondenze do un risultato approssimato
 				if (lint.size() == 0) lint.addAll(templint);
+				//printLint
+				printLint(lint,4);
 			}
 
 		}
+		//se non ho ancora trovato risultati, cerco per tipo
+		if (lint == null) {
+			lint = intr.findByTipo(interv.getTipo());
+			//printLint
+			printLint(lint,5);
+		}
 		
-		if (lint == null) lint = intr.findByTipo(interv.getTipo());
-		
-		if (lint.size() > 0) {
-			
-			if (man != null) {
+		if (lint.size() > 0) {//se ho trovato risultati...
+			//printLint
+			printLint(lint,6);
+			if (man != null) {//...e sono presenti dati di un manutentore, cerco corrispondenze tra manutentori nei risultati trovati
 				List<Intervento> templint = new ArrayList();
 				templint.addAll(lint);
 				lint.clear();
@@ -320,12 +341,15 @@ public class RestSearch {
 					}
 
 				}
-				
+				//printLint
+				printLint(lint,7);
 				//se non trova corrispondenze do un risultato approssimato
 				if (lint.size() == 0) lint.addAll(templint);
+				//printLint
+				printLint(lint,8);
 			}
 			
-			if (imp != null) {
+			if (imp != null) {//...see sono presenti dati di un impianto, cerco corrispondenze tra impianti nei risultati trovati
 				List<Intervento> templint = new ArrayList();
 				templint.addAll(lint);
 				lint.clear();
@@ -341,9 +365,12 @@ public class RestSearch {
 						
 
 				}
-				
+				//printLint
+				printLint(lint,9);
 				//se non trova corrispondenze do un risultato approssimato
 				if (lint.size() == 0) lint.addAll(templint);
+				//printLint
+				printLint(lint,10);
 			}
 
 			
@@ -364,8 +391,25 @@ public class RestSearch {
 			}
 
 		}
-
+		//printLint
+		printLint(lint,11);
 		return lint;
+	}
+	
+	public void printLint(List<Intervento> lint,int n) {
+		
+		if (lint != null) {
+			System.out.println("lsize"+n+": "+lint.size());
+			
+			Iterator it =lint.iterator();
+			
+			while (it.hasNext()) {
+				Intervento interv = (Intervento)it.next();
+				System.out.print(" [id: "+interv+"]");
+			}
+			
+			System.out.println("\n\n");
+		}
 	}
 
 
