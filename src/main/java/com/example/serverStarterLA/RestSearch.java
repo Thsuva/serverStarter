@@ -405,7 +405,7 @@ public class RestSearch {
 			
 			while (it.hasNext()) {
 				Intervento interv = (Intervento)it.next();
-				System.out.print(" [id: "+interv+"]");
+				System.out.print(" [id: "+interv.getId()+"]");
 			}
 			
 			System.out.println("\n\n");
